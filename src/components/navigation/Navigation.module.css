@@ -1,0 +1,12 @@
+.nav {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+    gap: 20px;
+}
+.active {
+    color: #f44747;
+    font-weight: bold;
+}
