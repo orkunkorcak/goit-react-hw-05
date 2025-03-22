@@ -1,30 +1,22 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams, Outlet } from "react-router-dom";
+import { fetchMovieDetails } from "../../MovieList";
 
 function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
-      const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
-      const options = {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYWNhZjRmYjMwZTRhZGVkYTBjYjI1MTQ3NGFhYTdkYSIsIm5iZiI6MTczODM1NDIxMy4zNDgsInN1YiI6IjY3OWQyZTI1MTc2ZmRiMjI0NGNiMjkzMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ug0aezZ5htnawKCPoADR0i-JxcDzj43sBX4NiKOKbvg",
-        },
-      };
-
+    const getMovieDetails = async () => {
       try {
-        const response = await axios.get(url, options);
-        setMovie(response.data);
+        const data = await fetchMovieDetails(movieId);
+        setMovie(data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchMovieDetails();
+    getMovieDetails();
   }, [movieId]);
 
   if (!movie) {
@@ -34,20 +26,25 @@ function MovieDetailsPage() {
   return (
     <>
       <div>
-        <button onClick={() => window.history.back()}>Go back</button>  
-      </div> 
+        <button onClick={() => window.history.back()}>Go back</button>
+      </div>
       <div>
-        <div> 
+        <div>
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-          /> 
+          />
         </div>
         <div>
           <h1>{movie.title}</h1>
           <p>{movie.overview}</p>
         </div>
       </div>
+      <nav>
+        <NavLink to="cast">Cast</NavLink>
+        <NavLink to="reviews">Reviews</NavLink>
+      </nav> 
+      <Outlet />
     </>
   );
 }

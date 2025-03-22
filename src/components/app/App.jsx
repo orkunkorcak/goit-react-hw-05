@@ -6,11 +6,11 @@ import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
 
 const Home = lazy(() => import("../../pages/home/Home"));
 const Movies = lazy(() => import("../../pages/movies/Movies"));
-const Cast = lazy(() => import("../movieCast/MovieCast"));
-const Reviews = lazy(() => import("../movieReviews/MovieReviews"));
 const MovieDetailsPage = lazy(() =>
   import("../../pages/movieDetailsPage/MovieDetailsPage")
 );
+const Cast = lazy(() => import("../movieCast/MovieCast"));
+const Reviews = lazy(() => import("../movieReviews/MovieReviews"));
 
 function App() {
   return (
@@ -19,11 +19,11 @@ function App() {
       <Suspense fallback={<div className={css.loading}>Loading...</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />}>
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
           </Route>
-          <Route path="/movies/:movieId" element={<MovieDetailsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
