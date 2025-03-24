@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { fetchMovies } from "../../MovieList";
+import css from "./Movies.module.css";
 
 function Movies() {
   const location = useLocation();
@@ -30,14 +31,14 @@ function Movies() {
 
   return (
     <>
-      <div>
+      <div className={css.searchForm}>
         <input
           type="text"
           name="searchInput"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button type="button" onClick={handleSearch}>
+        <button type="button" onClick={handleSearch} className={css.searchBtn}>
           Search
         </button>
       </div>
