@@ -1,13 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { fetchMovies } from "../../MovieList";
 
 function Movies() {
-  const [query, setQuery] = useState("");
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParam = searchParams.get("query") || "";
+  const [query, setQuery] = useState(queryParam);
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
     if (query.trim() === "") return;
+    setSearchParams({ query });
     try {
       const data = await fetchMovies(
         `/search/movie?query=${query}&language=en-US`
@@ -17,6 +21,12 @@ function Movies() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (queryParam) {
+      handleSearch();
+    }
+  }, [queryParam]);
 
   return (
     <>
@@ -35,7 +45,12 @@ function Movies() {
         <ul>
           {searchResults.map((movie) => (
             <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+              <Link
+                to={`/movies/${movie.id}`}
+                state={{ from: location, query, searchResults }}
+              >
+                {movie.title}
+              </Link>
             </li>
           ))}
         </ul>

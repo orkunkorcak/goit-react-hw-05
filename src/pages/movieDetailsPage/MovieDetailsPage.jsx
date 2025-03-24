@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { NavLink, useParams, Outlet } from "react-router-dom";
+import { NavLink, useParams, Outlet, useLocation } from "react-router-dom";
 import { fetchMovieDetails } from "../../MovieList";
+import BackLink from "../../components/backLink/BackLink";
 
 function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? "/movies";
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -26,7 +29,15 @@ function MovieDetailsPage() {
   return (
     <>
       <div>
-        <button onClick={() => window.history.back()}>Go back</button>
+        <BackLink
+          to={backLinkHref}
+          state={{
+            query: location.state?.query,
+            searchResults: location.state?.searchResults,
+          }}
+        >
+          Go back
+        </BackLink>
       </div>
       <div>
         <div>
@@ -43,7 +54,7 @@ function MovieDetailsPage() {
       <nav>
         <NavLink to="cast">Cast</NavLink>
         <NavLink to="reviews">Reviews</NavLink>
-      </nav> 
+      </nav>
       <Outlet />
     </>
   );
